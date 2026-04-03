@@ -1,0 +1,13 @@
+# AWS SDK
+boto3==1.34.51
+
+# Testing
+pytest==8.0.0
+pytest-cov==4.1.0
+hypothesis==6.98.0
+
+# AWS Mocking for local tests
+moto[s3,lambda]==5.0.0
+
+# HTTP requests for API testing
+requests==2.31.0
