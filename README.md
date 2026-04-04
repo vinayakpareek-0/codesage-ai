@@ -1,4 +1,4 @@
-# `CodeSage AI`
+# CodeSage AI
 
 > Your AI-powered code review companion built on AWS serverless architecture
 
@@ -19,5 +19,3 @@ An intelligent code analysis system that leverages AWS Bedrock's Claude 3 Sonnet
 **Work in Progress** - Currently building the core infrastructure and Lambda functions.
 
 ---
-
-*Building as part of my AWS ML/GenAI learning journey*
