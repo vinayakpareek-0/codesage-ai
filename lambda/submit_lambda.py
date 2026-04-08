@@ -12,6 +12,7 @@ from datetime import datetime
 
 # Initialize AWS clients
 s3_client = boto3.client('s3')
+lambda_client = boto3.client('lambda')
 
 # Configuration
 BUCKET_NAME = 'ai-code-reviewer-vinayak'    
@@ -56,6 +57,9 @@ def handler(event, context):
     storage_error = store_code_in_s3(submission_id, body['code'], body['language'])
     if storage_error:
         return storage_error
+    
+    # Trigger Analyze Lambda asynchronously
+    trigger_analyze_lambda(submission_id, body['language'])
     
     # Return success response
     return {
@@ -193,3 +197,27 @@ def store_code_in_s3(submission_id, code, language):
                 'message': 'Failed to store code submission. Please try again later.'
             })
         }
+
+
+def trigger_analyze_lambda(submission_id, language):
+    """
+    Trigger Analyze Lambda asynchronously.
+    
+    Args:
+        submission_id: Submission identifier
+        language: Programming language
+    """
+    
+    try:
+        lambda_client.invoke(
+            FunctionName='CodeSageAnalyzeLambda',
+            InvocationType='Event',  # Async invocation
+            Payload=json.dumps({
+                'submission_id': submission_id,
+                'language': language
+            })
+        )
+        print(f"Triggered Analyze Lambda for {submission_id}")
+        
+    except Exception as e:
+        print(f"Error triggering Analyze Lambda: {str(e)}")
